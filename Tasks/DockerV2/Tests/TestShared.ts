@@ -8,7 +8,8 @@ export let TestEnvVars = {
     buildContext: "__buildContext__",
     tags: "__tags__",
     arguments: "__arguments__",
-    addPipelineData: "__addPipelineData__"
+    addPipelineData: "__addPipelineData__",
+    labels: "__labels__"
 };
 
 export let OperatingSystems = {

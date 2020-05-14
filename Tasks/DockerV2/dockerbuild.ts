@@ -38,8 +38,12 @@ export function run(connection: ContainerConnection, outputUpdate: (data: string
     }
 
     const addPipelineData = tl.getBoolInput("addPipelineData");
-    // get label arguments
-    let labelArguments = pipelineUtils.getDefaultLabels(addPipelineData);
+    // get pipeline label arguments
+    let pipelineLabelArguments = pipelineUtils.getDefaultLabels(addPipelineData);
+
+    //get user specified labels
+    let userSpecifiedLabelArguments = tl.getInput("labels").split(/[\n,]+/);
+    let labelArguments = pipelineLabelArguments.concat(userSpecifiedLabelArguments)
 
     // get tags input
     let tags = tl.getInput("tags").split(/[\n,]+/);

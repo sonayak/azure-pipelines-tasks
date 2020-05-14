@@ -191,6 +191,23 @@ describe("DockerV2 Suite", function () {
         done();
     });
 
+    it('Docker build should work correctly with user specified labels', (done:MochaDone) => {
+        let tp = path.join(__dirname, 'TestSetup.js');
+        process.env[shared.TestEnvVars.containerRegistry] = "dockerhubendpoint";
+        process.env[shared.TestEnvVars.repository] = "testuser/testrepo";
+        process.env[shared.TestEnvVars.command] = shared.CommandTypes.build;        
+        process.env[shared.TestEnvVars.labels] = "key1=value1,key2=value2 \n key3=value3";
+        let tr : ttm.MockTestRunner = new ttm.MockTestRunner(tp);
+        tr.run();
+
+        assert(tr.invokedToolCount == 1, 'should have invoked tool one time. actual: ' + tr.invokedToolCount);
+        assert(tr.stderr.length == 0 || tr.errorIssues.length, 'should not have written to stderr');
+        assert(tr.succeeded, 'task should have succeeded');
+        assert(tr.stdout.indexOf(`[command]docker build -f ${shared.formatPath("a/w/Dockerfile")} ${shared.DockerCommandArgs.BuildLabels} --label key1=value1 --label key2=value2 --label key3=value3${shared.formatPath("a/w")}`) != -1, "docker build should run with expected arguments");
+        console.log(tr.stderr);
+        done();
+    });
+
     it('Docker build should honour arguments input', (done:MochaDone) => {
         let tp = path.join(__dirname, 'TestSetup.js');
         process.env[shared.TestEnvVars.containerRegistry] = "dockerhubendpoint";
