@@ -28,8 +28,8 @@ export function findDockerFile(dockerfilepath: string) : string {
     if (dockerfilepath.indexOf('*') >= 0 || dockerfilepath.indexOf('?') >= 0) {
         tl.debug(tl.loc('ContainerPatternFound'));
         let workingDirectory = tl.getVariable('System.DefaultWorkingDirectory');
-        let allFiles = tl.find(workingDirectory);
-        let matchingResultsFiles = tl.match(allFiles, dockerfilepath, workingDirectory, { matchBase: true });
+        
+        let matchingResultsFiles = tl.findMatch(workingDirectory, dockerfilepath, null, { matchBase: true });
 
         if (!matchingResultsFiles || matchingResultsFiles.length == 0) {
             throw new Error(tl.loc('ContainerDockerFileNotFound', dockerfilepath));
